@@ -1,8 +1,8 @@
+DATA_DIR = "/home/svassili/scratch/energy3/vtu"
+SAVE_ANIMATION = True
+ANIMATION_FILE = "MinasEntry.png"
 
-DATA_DIR = "/Users/svassili/ACENET/energy3/vtu"
-SAVE_ANIMATION = False
-ANIMATION_FILE = "test.avi"
-FRAMES=[0,119]
+FRAMES=[0,2]
 
 from paraview.simple import *
 import os
@@ -12,7 +12,7 @@ paraview.simple._DisableFirstRenderCameraReset()
 # create a new 'XML Unstructured Grid Reader'
 os.chdir(DATA_DIR)
 #files=sorted(os.listdir("."))
-files=sorted(glob.glob("*.vtu"))
+files=sorted(glob.glob(DATA_DIR+'/'+'*.vtu'))
 dn = XMLUnstructuredGridReader(FileName=files)
 dn.CellArrayStatus = ['u', 'v', 'ww']
 
@@ -45,10 +45,10 @@ glyph1 = Glyph(Input=calculator2, GlyphType='Arrow')
 # ---
 
 # Grand Passage
-glyph1.GlyphMode = 'Every Nth Point'
-glyph1.Stride = 500
-glyph1.ScaleFactor = 100.0
-# ---
+#glyph1.GlyphMode = 'Every Nth Point'
+#glyph1.Stride = 500
+#glyph1.ScaleFactor = 100.0
+
 
 # Minas Passage Entrance
 glyph1.GlyphMode = 'Every Nth Point'
@@ -56,9 +56,15 @@ glyph1.Stride = 60
 glyph1.ScaleFactor = 2500.0
 # ---
 
-
+# Paraview 5.7
 glyph1.OrientationArray = ['CELLS', 'Vel']
-glyph1.ScaleArray = ['CELLS', 'Reduced']
+glyph1.ScaleArray = ['CELLS', 'Reduced'] # v.5.7
+
+# Paraview 5.5
+#glyph1.Vectors = ['CELLS', 'Vel']
+#glyph1.Scalars = ['CELLS', 'Reduced']
+#glyph1.ScaleMode = 'scalar'         
+
 glyph1.GlyphTransform = 'Transform2'
 SetActiveSource(glyph1)
 glyph1Display = Show(glyph1, renderView1)
@@ -105,21 +111,20 @@ velLUTColorBar.WindowLocation = 'AnyLocation'
 velLUTColorBar.Position = [0.91, 0.05]
 velLUTColorBar.ScalarBarLength = 0.2
 
-# Grand Passage
-#renderView1.CameraPosition = [-131400, 290700, 380000]
-#renderView1.CameraFocalPoint = [-131400, 290700, 0]
-#renderView1.CameraParallelScale = 2200
-#camera.Roll(-90)
-
-# Minas entrance
-renderView1.CameraPosition = [36000, 390000, 380000]
-renderView1.CameraFocalPoint = [36000, 390000, 0]
+# Minas passage Entrance
+renderView1.CameraPosition = [37000, 390000, 380000]
+renderView1.CameraFocalPoint = [37000, 390000, 0]
 renderView1.CameraParallelScale = 32200
 camera.Roll(20)
 
+# Grand Passage
+#renderView1.CameraPosition = [-131400, 290700, 380000]
+#renderView1.CameraFocalPoint = [-131400, 290700, 0]
+#renderView1.CameraParallelScale = 1600
+#camera.Roll(-90)
 
 if SAVE_ANIMATION:
-    SaveAnimation(DATA_DIR+"/"+ANIMATION_FILE, renderView1, ImageResolution=[1900, 1200], FrameRate=5, FrameWindow=FRAMES)
+    SaveAnimation(DATA_DIR+"/"+ANIMATION_FILE, renderView1, ImageResolution=[1900,1200], FrameWindow=FRAMES)
 else:
     Interact()
     #animationScene1.Play()
