@@ -124,7 +124,7 @@ renderView1.CameraParallelScale = CAMERA_PARALLEL_SCALE
 GetActiveCamera().Roll(CAMERA_ROLL)
 
 if SAVE_ANIMATION:
-    SaveAnimation(DATA_DIR+"/"+ANIMATION_FILE, renderView1, ImageResolution=VIEW_SIZE, FrameWindow=FRAMES)
+    SaveAnimation(OUTPUT_DIR+"/"+ANIMATION_FILE, renderView1, ImageResolution=VIEW_SIZE, FrameWindow=FRAMES)
 else:
     Interact()
     #animationScene1.Play()
