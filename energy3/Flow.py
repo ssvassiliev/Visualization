@@ -41,9 +41,7 @@ calculator1 = Calculator(Input=dn)
 calculator1.AttributeType = 'Cell Data'
 calculator1.ResultArrayName = 'Vel'
 calculator1.Function = 'iHat*u+jHat*v+kHat*ww'
-
 form = 'iHat*abs(u)^' + str(REDUCE_POWER) + '+jHat*abs(v)^' + str(REDUCE_POWER) + '+kHat*abs(ww)^' + str(REDUCE_POWER)
-print(form)
 calculator2 = Calculator(Input=calculator1)
 calculator2.AttributeType = 'Cell Data'
 calculator2.ResultArrayName = 'Reduced'
@@ -110,13 +108,13 @@ calculator1Display.SetScalarBarVisibility(renderView1, False)
 
 velLUT = GetColorTransferFunction('Vel')
 velLUT.ApplyPreset(COLOR_MAP, True)
-'''
-velLUTColorBar = GetScalarBar(velLUT, renderView1)
-velLUTColorBar.Orientation = VEL_LUT_COLORBAR_ORIENTATION
-velLUTColorBar.WindowLocation = VEL_LUT_COLORBAR_WINDOW_LOCATION
-velLUTColorBar.Position = VEL_LUT_COLORBAR_POSITION
-velLUTColorBar.ScalarBarLength = VEL_LUT_COLORBAR_LENGTH
-'''
+if SHOW_VEL_LUT_COLOR_BAR:
+    velLUTColorBar = GetScalarBar(velLUT, renderView1)
+    velLUTColorBar.Orientation = VEL_LUT_COLORBAR_ORIENTATION
+    velLUTColorBar.WindowLocation = VEL_LUT_COLORBAR_WINDOW_LOCATION
+    velLUTColorBar.Position = VEL_LUT_COLORBAR_POSITION
+    velLUTColorBar.ScalarBarLength = VEL_LUT_COLORBAR_LENGTH
+
 renderView1.OrientationAxesVisibility = 0
 renderView1.CameraViewUp = [0,1,0]
 renderView1.CameraParallelProjection = 1
