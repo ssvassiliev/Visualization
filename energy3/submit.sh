@@ -17,6 +17,7 @@ i=0
 job=1
 
 read -d '' slurm << EOF
+#!/bin/bash
 #SBATCH --account=def-svassili
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=4000M
@@ -28,8 +29,8 @@ remainder=$(($nframes % $ncpu))
 while [ $(($i+$part)) -le $nframes ]
 do
   echo "$slurm" > slurm
-  echo pvbatch Flow.py $1 $(($i+$start)), $(($i + $start + $part - 1)) >> slurm
-  echo sqsub slurm
+  echo pvbatch Flow.py $1 $(($i+$start)) $(($i + $start + $part - 1)) >> slurm
+  sbatch slurm
   echo "submitted job" $job:
   cat slurm
   job=$(($job+1))
@@ -37,7 +38,7 @@ do
 done
 echo "$slurm" > slurm
 echo pvbatch Flow.py $1 $(($i + $start)) $(($i + $start+ $remainder)) >> slurm
-  echo sqsub slurm
+sbatch slurm
 echo "submitted job" $job:
 cat slurm
 job=$(($job+1))
