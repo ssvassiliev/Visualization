@@ -27,6 +27,8 @@ do
 done
 echo "$slurm" > slurm
 echo pvbatch Flow.py Petit $(($i + $start)) $(($i + $start+ $remainder)) >> slurm
+  echo sqsub slurm
 echo "submitted job" $job:
 cat slurm
 job=$(($job+1))
+rm slurm
