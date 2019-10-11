@@ -15,7 +15,7 @@ import argparse
 from paraview.simple import *
 
 # Need this line to run the script from paraview
-sys.path.append("/Users/svassili/ACENET/Vizualization/energy3/")
+sys.path.append("/Users/svassili/ACENET/Visualization/energy3/")
 
 parser = argparse.ArgumentParser()
 parser.add_argument('config', action='store',
@@ -26,10 +26,9 @@ parser.add_argument("last", type=int,
                     help="last frame to render")
 results = parser.parse_args()
 
-line = "from "+results.config+" import *"
-exec(line)
 FRAMES = [results.first, results.last]
-REDUCE_POWER = 0.3
+exec("from "+results.config+" import *")
+#REDUCE_POWER = 0.3
 
 paraview.simple._DisableFirstRenderCameraReset()
 os.chdir(DATA_DIR)
