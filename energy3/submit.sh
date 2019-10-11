@@ -26,7 +26,7 @@ EOF
 
 part=$(($nframes/$ncpu))
 remainder=$(($nframes % $ncpu))
-while [ $(($i+$part+$remainder)) -lt $nframes ]
+while [ $(($i+$part+$remainder)) -le $nframes ]
 do
   echo i=$i job=$job
   echo "$slurm" > slurm
@@ -40,7 +40,7 @@ done
 echo "$slurm" > slurm
 echo pvbatch Flow.py $1 $(($i + $start)) $(($i + $start + $remainder)) >> slurm
 sbatch slurm
-echo "submitted job" $job "frames:" $(($i + $start)) "to" $(($i + $start + $part - 1))
+echo "submitted job" $job "frames:" $(($i + $start)) "to" $(($i + $start + $remainder))
 #cat slurm
 job=$(($job+1))
 rm slurm
