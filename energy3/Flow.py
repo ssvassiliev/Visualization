@@ -34,6 +34,11 @@ REDUCE_POWER = 0.3
 paraview.simple._DisableFirstRenderCameraReset()
 os.chdir(DATA_DIR)
 files=sorted(glob.glob(DATA_DIR+'/'+'*.vtu'))
+
+if len(files) < results.last:
+    print("Error: frame window exceeds the number of datafiles")
+    sys.exit()
+
 dn = XMLUnstructuredGridReader(FileName=files)
 dn.CellArrayStatus = ['u', 'v', 'ww']
 
@@ -126,5 +131,6 @@ GetActiveCamera().Roll(CAMERA_ROLL)
 if SAVE_ANIMATION:
     SaveAnimation(OUTPUT_DIR+"/"+ANIMATION_FILE, renderView1, ImageResolution=VIEW_SIZE, FrameWindow=FRAMES)
 else:
+    print(FRAMES)
     Interact()
     #animationScene1.Play()
