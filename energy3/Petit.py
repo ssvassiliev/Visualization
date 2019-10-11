@@ -1,6 +1,6 @@
 # Petit Passage Vertical
-DATA_DIR = "/home/svassili/scratch/energy3/vtu"
-#DATA_DIR = "/Users/svassili/ACENET/Vizualization/energy3/vtu"
+DATA_DIR = "/home/razoumov/scratch/mguerra"
+OUTPUT_DIR = "/home/svassili/scratch/Visualization/energy3/frames"
 SAVE_ANIMATION = True
 ANIMATION_FILE = "Petit.png"
 COLOR_MAP = 'jet'
