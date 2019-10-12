@@ -1,8 +1,11 @@
-# Petit Passage Vertical
-#DATA_DIR = "/home/svassili/scratch/energy3/vtu"
+# Grand Passage
+# CC
+#DATA_DIR = "/home/razoumov/scratch/mguerra"
+#OUTPUT_DIR = "/home/svassili/scratch/Visualization/energy3/frames"
+# Laptop
 DATA_DIR = "/Users/svassili/ACENET/Visualization/energy3/vtu"
 OUTPUT_DIR = "/Users/svassili/ACENET/Visualization/energy3/tmp"
-SAVE_ANIMATION = True
+SAVE_ANIMATION = False
 ANIMATION_FILE = "Grand.png"
 COLOR_MAP = 'jet'
 BACKGROUND = [0.0, 0.1, 0.05]
@@ -15,8 +18,9 @@ GLYPH_STRIDE = 1000
 GLYPH_SCALE_FACTOR = 150.0
 GLYPH_VECTOR_SCALE_MODE = 'Scale by Components'
 GLYPH2_MODE = 'Uniform Spatial Distribution (Surface Sampling)'
+#GLYPH2_MODE = None
 GLYPH2_SCALE_FACTOR = 150.0
-GLYPH2_MAX_NUM_SAMPLE_POINTS = 40000000
+GLYPH2_MAX_NUM_SAMPLE_POINTS = 30000000
 GLYPH2_SEED = 10333
 SHOW_VEL_LUT_COLOR_BAR = False
 VEL_LUT_COLORBAR_ORIENTATION = 'Vertical'
