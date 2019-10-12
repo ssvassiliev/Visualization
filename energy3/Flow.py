@@ -41,17 +41,28 @@ if len(files) < results.last:
 dn = XMLUnstructuredGridReader(FileName=files)
 dn.CellArrayStatus = ['u', 'v', 'ww']
 
-calculator1 = Calculator(Input=dn)
-calculator1.AttributeType = 'Cell Data'
-calculator1.ResultArrayName = 'Vel'
-calculator1.Function = 'iHat*u+jHat*v+kHat*ww'
+vel_vec = Calculator(Input=dn)
+vel_vec.AttributeType = 'Cell Data'
+vel_vec.ResultArrayName = 'Vel'
+vel_vec.Function = 'iHat*u+jHat*v+kHat*ww'
 form = 'iHat*abs(u)^' + str(REDUCE_POWER) + '+jHat*abs(v)^' + str(REDUCE_POWER) + '+kHat*abs(ww)^' + str(REDUCE_POWER)
-calculator2 = Calculator(Input=calculator1)
-calculator2.AttributeType = 'Cell Data'
-calculator2.ResultArrayName = 'Reduced'
-calculator2.Function = form
 
-glyph1 = Glyph(Input=calculator2, GlyphType='Arrow')
+vel_compress = Calculator(Input=vel_vec)
+vel_compress.AttributeType = 'Cell Data'
+vel_compress.ResultArrayName = 'Reduced'
+vel_compress.Function = form
+
+curl_vec = PythonCalculator(Input=vel_vec)
+curl_vec.ArrayAssociation = 'Cell Data'
+curl_vec.Expression = 'curl(Vel)'
+curl_vec.ArrayName = 'Curl'
+
+curl_compress = Calculator(Input=curl_vec)
+curl_compress.AttributeType = 'Cell Data'
+curl_compress.ResultArrayName = 'Reduced_Curl'
+curl_compress.Function = 'mag(Curl)^0.4'
+
+glyph1 = Glyph(Input=vel_compress, GlyphType='Arrow')
 glyph1.GlyphTransform = 'Transform2'
 glyph1.GlyphMode = GLYPH_MODE
 if GLYPH_MODE == 'Every Nth Point':
@@ -65,7 +76,7 @@ glyph1.OrientationArray = ['CELLS', 'Vel']
 glyph1.ScaleArray = ['CELLS', 'Reduced']
 
 if GLYPH2_MODE is not None:
-    glyph2 = Glyph(Input=calculator2, GlyphType='Arrow')
+    glyph2 = Glyph(Input=vel_compress, GlyphType='Arrow')
     glyph2.GlyphTransform = 'Transform2'
     glyph2.GlyphMode = GLYPH2_MODE
     if GLYPH2_MODE == 'Every Nth Point':
@@ -91,7 +102,7 @@ glyph1Display = Show(glyph1, renderView1)
 #if 'Uniform Spatial Distribution' in GLYPH_MODE:
 #    ColorBy(glyph1Display, None)
 glyph1Display.AmbientColor = [1.0, 1.0, 1.0]
-glyph1Display.DiffuseColor = [1.0, 1.0, 1.0]
+glyph1Display.DiffuseColor = [0.4, 0.6, 1.0]
 
 if GLYPH2_MODE is not None:
     SetActiveSource(glyph2)
@@ -101,14 +112,28 @@ if GLYPH2_MODE is not None:
 #    if 'Uniform Spatial Distribution' in GLYPH2_MODE:
 #        ColorBy(glyph2Display, None)
     glyph2Display.AmbientColor = [1.0, 1.0, 1.0]
-    glyph2Display.DiffuseColor = [1.0, 1.0, 1.0]
+    glyph2Display.DiffuseColor = [0.4, 0.6, 1.0]
 
-SetActiveSource(calculator1)
-calculator1Display = Show(calculator1, renderView1)
-ColorBy(calculator1Display, ('CELLS', 'Vel', 'Magnitude'))
-calculator1Display.RescaleTransferFunctionToDataRange(True, False)
-calculator1Display.Opacity = 0.6
-calculator1Display.SetScalarBarVisibility(renderView1, False)
+# VEL
+'''
+SetActiveSource(vel_vec)
+vel_vecDisplay = Show(vel_vec, renderView1)
+ColorBy(vel_vecDisplay, ('CELLS', 'Vel', 'Magnitude'))
+vel_vecDisplay.RescaleTransferFunctionToDataRange(True, False)
+calculator2Display.ColorArrayName = ['CELLS', 'Result']
+vel_vecDisplay.SetScalarBarVisibility(renderView1, False)
+'''
+
+# CURL
+
+SetActiveSource(curl_compress)
+curl_vecDisplay = Show(curl_compress, renderView1)
+#curl_vecDisplay.SetScalarBarVisibility(renderView1, True)
+curl_vecDisplay.ColorArrayName = ['CELLS', 'Reduced_Curl']
+curlLUT = GetColorTransferFunction('Reduced_Curl')
+curlLUT.RescaleTransferFunction(0.0, 0.5)
+curlLUT.ApplyPreset(COLOR_MAP, True)
+curl_vecDisplay.Opacity = 0.7
 
 velLUT = GetColorTransferFunction('Vel')
 velLUT.ApplyPreset(COLOR_MAP, True)
