@@ -41,7 +41,8 @@ if len(files) < results.last:
 dn = XMLUnstructuredGridReader(FileName=files)
 dn.CellArrayStatus = ['u', 'v', 'ww']
 
-vel_vec = Calculator(Input=dn)
+temporalInterpolator1 = TemporalInterpolator(Input=dn)
+vel_vec = Calculator(Input=temporalInterpolator1)
 vel_vec.AttributeType = 'Cell Data'
 vel_vec.ResultArrayName = 'Vel'
 vel_vec.Function = 'iHat*u+jHat*v+kHat*ww'
@@ -91,6 +92,9 @@ if GLYPH2_MODE is not None:
 
 animationScene1 = GetAnimationScene()
 animationScene1.UpdateAnimationUsingDataTimeSteps()
+animationScene1.StartTime = results.first
+animationScene1.EndTime = results.last
+animationScene1.NumberOfFrames = (results.last-results.first+1)*10
 renderView1 = GetActiveViewOrCreate('RenderView')
 renderView1.ViewSize = VIEW_SIZE
 SetViewProperties(Background=BACKGROUND)
@@ -131,7 +135,7 @@ curl_vecDisplay = Show(curl_compress, renderView1)
 #curl_vecDisplay.SetScalarBarVisibility(renderView1, True)
 curl_vecDisplay.ColorArrayName = ['CELLS', 'Reduced_Curl']
 curlLUT = GetColorTransferFunction('Reduced_Curl')
-curlLUT.RescaleTransferFunction(0.0, 0.5)
+curlLUT.RescaleTransferFunction(0.0, 0.3)
 curlLUT.ApplyPreset(COLOR_MAP, True)
 curl_vecDisplay.Opacity = 0.7
 
