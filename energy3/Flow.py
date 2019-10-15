@@ -94,7 +94,17 @@ animationScene1 = GetAnimationScene()
 animationScene1.UpdateAnimationUsingDataTimeSteps()
 animationScene1.StartTime = results.first
 animationScene1.EndTime = results.last
-animationScene1.NumberOfFrames = (results.last-results.first+1)*10
+
+interp=10
+EndFrame=results.last*interp
+FirstFrame=results.first*interp
+animationScene1.NumberOfFrames = EndFrame-FirstFrame
+
+#FRAMES = [FirstFrame, EndFrame]
+FRAMES = [0, animationScene1.NumberOfFrames-2]
+
+print (animationScene1.NumberOfFrames , FRAMES,animationScene1.StartTime,animationScene1.EndTime)
+
 renderView1 = GetActiveViewOrCreate('RenderView')
 renderView1.ViewSize = VIEW_SIZE
 SetViewProperties(Background=BACKGROUND)
@@ -118,7 +128,7 @@ if GLYPH2_MODE is not None:
     glyph2Display.AmbientColor = [1.0, 1.0, 1.0]
     glyph2Display.DiffuseColor = [0.4, 0.6, 1.0]
 
-# VEL
+# SHOW VEL
 '''
 SetActiveSource(vel_vec)
 vel_vecDisplay = Show(vel_vec, renderView1)
@@ -128,7 +138,7 @@ calculator2Display.ColorArrayName = ['CELLS', 'Result']
 vel_vecDisplay.SetScalarBarVisibility(renderView1, False)
 '''
 
-# CURL
+# SHOW CURL
 
 SetActiveSource(curl_compress)
 curl_vecDisplay = Show(curl_compress, renderView1)
@@ -156,6 +166,7 @@ renderView1.CameraFocalPoint = CAMERA_FOCAL_POINT
 renderView1.CameraParallelScale = CAMERA_PARALLEL_SCALE
 GetActiveCamera().Roll(CAMERA_ROLL)
 
+ANIMATION_FILE=str(results.first)+".png"
 if SAVE_ANIMATION:
     SaveAnimation(OUTPUT_DIR+"/"+ANIMATION_FILE, renderView1, ImageResolution=VIEW_SIZE, FrameWindow=FRAMES)
 else:
