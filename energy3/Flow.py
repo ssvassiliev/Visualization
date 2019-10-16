@@ -95,13 +95,13 @@ animationScene1.UpdateAnimationUsingDataTimeSteps()
 animationScene1.StartTime = results.first
 animationScene1.EndTime = results.last
 
-interp=10
+interp=4
 EndFrame=results.last*interp
 FirstFrame=results.first*interp
 animationScene1.NumberOfFrames = EndFrame-FirstFrame
 
 #FRAMES = [FirstFrame, EndFrame]
-FRAMES = [0, animationScene1.NumberOfFrames-2]
+FRAMES = [0, animationScene1.NumberOfFrames-1]
 
 print (animationScene1.NumberOfFrames , FRAMES,animationScene1.StartTime,animationScene1.EndTime)
 
@@ -145,7 +145,7 @@ curl_vecDisplay = Show(curl_compress, renderView1)
 #curl_vecDisplay.SetScalarBarVisibility(renderView1, True)
 curl_vecDisplay.ColorArrayName = ['CELLS', 'Reduced_Curl']
 curlLUT = GetColorTransferFunction('Reduced_Curl')
-curlLUT.RescaleTransferFunction(0.0, 0.3)
+curlLUT.RescaleTransferFunction(0.0, 0.25)
 curlLUT.ApplyPreset(COLOR_MAP, True)
 curl_vecDisplay.Opacity = 0.7
 
