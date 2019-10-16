@@ -94,16 +94,14 @@ animationScene1 = GetAnimationScene()
 animationScene1.UpdateAnimationUsingDataTimeSteps()
 animationScene1.StartTime = results.first
 animationScene1.EndTime = results.last
+FRAMES = [0, animationScene1.NumberOfFrames-1]
+# without temporal interpolation:
+# FRAMES = [FirstFrame, EndFrame]
 
 interp=4
 EndFrame=results.last*interp
 FirstFrame=results.first*interp
 animationScene1.NumberOfFrames = EndFrame-FirstFrame
-
-#FRAMES = [FirstFrame, EndFrame]
-FRAMES = [0, animationScene1.NumberOfFrames-1]
-
-print (animationScene1.NumberOfFrames , FRAMES,animationScene1.StartTime,animationScene1.EndTime)
 
 renderView1 = GetActiveViewOrCreate('RenderView')
 renderView1.ViewSize = VIEW_SIZE
@@ -170,6 +168,4 @@ ANIMATION_FILE=str(results.first)+".png"
 if SAVE_ANIMATION:
     SaveAnimation(OUTPUT_DIR+"/"+ANIMATION_FILE, renderView1, ImageResolution=VIEW_SIZE, FrameWindow=FRAMES)
 else:
-    print(FRAMES)
     Interact()
-    #animationScene1.Play()
