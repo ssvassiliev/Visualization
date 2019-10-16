@@ -13,7 +13,7 @@ end=$3
 nframes=$(($end-$start))
 ncpu=$4
 
-i=0
+i=1
 job=1
 
 read -d '' slurm << EOF
@@ -21,7 +21,7 @@ read -d '' slurm << EOF
 #SBATCH --account=def-svassili
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=4000M
-#SBATCH --time=3:0:0
+#SBATCH --time=12:0:0
 EOF
 
 part=$(($nframes/$ncpu))
@@ -30,16 +30,16 @@ while [ $(($i+$part+$remainder)) -le $nframes ]
   do
     echo i=$i job=$job
     echo "$slurm" > slurm
-    echo pvbatch Flow.py $1 $(($i + $start)) $(($i + $start + $part - 1)) >> slurm
+    echo pvbatch Flow.py $1 $(($i + $start - 1)) $(($i + $start + $part - 1)) >> slurm
     sbatch slurm
-    echo "submitted job" $job: "frames" $(($i + $start)) "to" $(($i + $start + $part - 1))
+    echo "submitted job" $job: "frames" $(($i + $start - 1)) "to" $(($i + $start + $part - 1))
     job=$(($job+1))
     i=$(($i+$part))
   done
 if [ $remainder -gt 0 ]; then
   echo "$slurm" > slurm
-  echo pvbatch Flow.py $1 $(($i + $start)) $(($i + $start + $remainder)) >> slurm
+  echo pvbatch Flow.py $1 $(($i + $start - 1)) $(($i + $start + $remainder)) >> slurm
   sbatch slurm
-  echo "submitted job" $job: "frames" $(($i + $start)) "to" $(($i + $start + $remainder))
+  echo "submitted job" $job: "frames" $(($i + $start - 1)) "to" $(($i + $start + $remainder))
 fi
 rm slurm
